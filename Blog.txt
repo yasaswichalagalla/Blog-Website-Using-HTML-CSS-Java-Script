@@ -1,472 +1,437 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Discover Vizag - Travel Blog</title>
-<style>
-  /* Reset & base */
-  * {
-    box-sizing: border-box;
-    margin: 0; padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
-  body {
-    background: #f5f8fa;
-    color: #333;
-    line-height: 2.0;
-    scroll-behavior: smooth;
-  }
-  a {
-    color: #0077cc;
-    text-decoration: none;
-  }
-  a:hover {
-    text-decoration: underline;
-  }
-
-  /* Sticky header & nav */
-  header {
-    position: relative;
-    background: url('https://i.pinimg.com/736x/56/95/94/5695945b420e69062552d865058a3a69.jpg') no-repeat center/cover;
-    height: 70vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    text-shadow: 2px 2px 5px #000;
-    text-align: center;
-    padding: 0 1rem;
-    transition: background-color 0.4s ease;
-  }
-  header.sticky {
-    background: #0077cc;
-    height: 60px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-  }
-  header.sticky h1,
-  header.sticky p {
-    display: none;
-  }
-
-  /* Navigation bar */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    background: rgba(255,255,255,0.95);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.5rem 2rem;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    z-index: 9999;
-    transition: top 0.3s;
-  }
-  nav .logo {
-    font-weight: 700;
-    color: #0077cc;
-    font-size: 1.4rem;
-  }
-  nav ul {
-    list-style: none;
-    display: flex;
-    gap: 1.5rem;
-  }
-  nav ul li a {
-    font-weight: 600;
-    color: #333;
-    transition: color 0.3s;
-  }
-  nav ul li a:hover {
-    color: #0077cc;
-  }
-
-  /* Hamburger menu */
-  .menu-toggle {
-    display: none;
-    flex-direction: column;
-    cursor: pointer;
-  }
-  .menu-toggle div {
-    width: 25px;
-    height: 3px;
-    background: #0077cc;
-    margin: 4px 0;
-    transition: 0.4s;
-  }
-
-  /* Responsive nav */
-  @media (max-width: 768px) {
-    nav ul {
-      position: fixed;
-      top: 60px; right: -100%;
-      background: white;
-      height: 100vh;
-      width: 200px;
-      flex-direction: column;
-      padding-top: 2rem;
-      gap: 1rem;
-      transition: right 0.3s ease;
-      box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Discover Vizag Blog</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
-    nav ul.active {
-      right: 0;
+
+    body {
+      background: #f9f9f9;
+      color: #333;
+      line-height: 1.6;
     }
-    .menu-toggle {
+
+    header {
+      background: #2a9df4;
+      color: white;
+      padding: 2rem 1rem;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.3rem;
+    }
+
+    header p {
+      font-size: 1.1rem;
+      font-weight: 300;
+    }
+
+    nav {
+      background: #007acc;
       display: flex;
+      justify-content: space-between;
+      padding: 0.8rem 2rem;
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      flex-wrap: wrap;
     }
-  }
 
-  /* Hero text */
-  header > div {
-    max-width: 600px;
-  }
-  header h1 {
-    font-size: 3rem;
-    margin-bottom: 0.5rem;
-    transition: opacity 0.5s ease;
-  }
-  header p {
-    font-size: 1.2rem;
-    max-width: 600px;
-    transition: opacity 0.5s ease;
-  }
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 0.7rem;
+      transition: color 0.3s ease;
+    }
 
-  /* Main content */
-  main {
-    max-width: 1100px;
-    margin: 2rem auto 4rem;
-    padding: 0 1rem;
-  }
-  section {
-    margin-bottom: 3rem;
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-  }
-  section.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  section h2 {
-    color: #0077cc;
-    margin-bottom: 1rem;
-    border-bottom: 2px solid #0077cc;
-    display: inline-block;
-    padding-bottom: 0.3rem;
-  }
+    nav a:hover {
+      color: #ffdd57;
+    }
 
-  /* Places grid */
-  .places {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-  }
-  .place-card {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-    overflow: hidden;
-    cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  .place-card:hover {
-    transform: translateY(-7px);
-    box-shadow: 0 8px 15px rgba(0,0,0,0.15);
-  }
-  .place-card img {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-    display: block;
-  }
-  .place-card div {
-    padding: 1rem;
-  }
-  .place-card h3 {
-    margin-bottom: 0.5rem;
-    color: #004080;
-  }
+    .container {
+      max-width: 1100px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
 
-  /* Lightbox */
-  #lightbox {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.8);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 10000;
-  }
-  #lightbox img {
-    max-width: 90%;
-    max-height: 90%;
-    border-radius: 8px;
-    box-shadow: 0 0 15px #fff;
-  }
-  #lightbox:target {
-    display: flex;
-  }
+    #about, #contact {
+      background: white;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    }
 
-  /* Food & Culture */
-  .food-culture p {
-    max-width: 800px;
-    margin-bottom: 1rem;
-    font-size: 1.1rem;
-  }
+    #about h2, #contact h2 {
+      color: #007acc;
+      margin-bottom: 0.5rem;
+    }
 
-  /* Contact form */
-  form {
-    background: white;
-    padding: 1.5rem;
-    border-radius: 8px;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-    max-width: 500px;
-    margin: auto;
-  }
-  form label {
-    display: block;
-    margin-bottom: 0.3rem;
-    font-weight: 600;
-  }
-  form input, form textarea {
-    width: 100%;
-    padding: 0.6rem;
-    margin-bottom: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 1rem;
-  }
-  form button {
-    background: #0077cc;
-    color: white;
-    border: none;
-    padding: 0.7rem 1.5rem;
-    font-size: 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-  }
-  form button:hover {
-    background: #005fa3;
-  }
+    #about p, #contact p {
+      margin-bottom: 1rem;
+    }
 
-  /* Footer */
-  footer {
-    text-align: center;
-    padding: 1rem 0;
-    background: #0077cc;
-    color: white;
-    font-size: 0.9rem;
-    margin-top: 2rem;
-  }
+    .search-bar {
+      margin-bottom: 2rem;
+      text-align: center;
+    }
 
-  /* Scroll to top */
-  #scrollTopBtn {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    background: #0077cc;
-    color: white;
-    border: none;
-    padding: 0.6rem 1rem;
-    border-radius: 50%;
-    font-size: 1.5rem;
-    cursor: pointer;
-    display: none;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.3);
-    transition: background 0.3s ease;
-    z-index: 1000;
-  }
-  #scrollTopBtn:hover {
-    background: #005fa3;
-  }
+    .search-bar input[type="text"] {
+      width: 90%;
+      max-width: 500px;
+      padding: 0.8rem 1rem;
+      font-size: 1rem;
+      border: 2px solid #ddd;
+      border-radius: 25px;
+      transition: border-color 0.3s ease;
+    }
 
-</style>
+    .search-bar input[type="text"]:focus {
+      outline: none;
+      border-color: #007acc;
+    }
+
+    #blog {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+
+    .blog-post {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease;
+    }
+
+    .blog-post:hover {
+      transform: translateY(-5px);
+    }
+
+    .blog-post h2 {
+      color: #007acc;
+      margin-bottom: 0.3rem;
+    }
+
+    .date {
+      font-size: 0.9rem;
+      color: #777;
+      margin-bottom: 1rem;
+      font-style: italic;
+    }
+
+    .blog-post img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+    }
+
+    .tags {
+      margin-bottom: 1rem;
+    }
+
+    .tag {
+      display: inline-block;
+      background: #007acc;
+      color: white;
+      padding: 0.3rem 0.7rem;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      margin-right: 0.4rem;
+      text-transform: capitalize;
+    }
+
+    .social-share {
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .social-share a {
+      margin-left: 0.5rem;
+      color: #007acc;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .social-share a:hover {
+      color: #ff7b00;
+    }
+
+    .comments {
+      border-top: 1px solid #eee;
+      padding-top: 1rem;
+    }
+
+    .comment-form input[type="text"],
+    .comment-form textarea {
+      width: 100%;
+      padding: 0.7rem 0.8rem;
+      margin-bottom: 0.8rem;
+      border: 1.5px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+      resize: vertical;
+      transition: border-color 0.3s ease;
+    }
+
+    .comment-form input[type="text"]:focus,
+    .comment-form textarea:focus {
+      border-color: #007acc;
+      outline: none;
+    }
+
+    .comment-form button {
+      background: #007acc;
+      color: white;
+      padding: 0.6rem 1.5rem;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+    }
+
+    .comment-form button:hover {
+      background: #005a9c;
+    }
+
+    /* Contact Info Styling */
+    .contact-info {
+      background: #f0f8ff;
+      padding: 1.5rem 1.8rem;
+      margin-top: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 3px 8px rgba(0, 122, 204, 0.2);
+      color: #004a99;
+    }
+
+    .contact-info h3 {
+      margin-bottom: 1rem;
+      color: #007acc;
+      font-weight: 600;
+      font-size: 1.4rem;
+    }
+
+    .contact-info p {
+      margin-bottom: 0.6rem;
+      font-size: 1rem;
+    }
+
+    .contact-info a {
+      color: #007acc;
+      text-decoration: none;
+      font-weight: 600;
+      margin: 0 0.3rem;
+      transition: color 0.3s ease;
+    }
+
+    .contact-info a:hover {
+      color: #ff7b00;
+      text-decoration: underline;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1.5rem 0;
+      background: #2a9df4;
+      color: white;
+      margin-top: 3rem;
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+
+    @media(max-width: 600px) {
+      nav {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      nav div {
+        margin: 0.4rem 0;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<nav>
-  <div class="logo">Discover Vizag</div>
-  <ul id="navLinks">
-    <li><a href="#about">About</a></li>
-    <li><a href="#places">Places</a></li>
-    <li><a href="#food">Food & Culture</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-  <div class="menu-toggle" id="menuToggle">
-    <div></div>
-    <div></div>
-    <div></div>
-  </div>
-</nav>
-
-<header id="hero">
-  <div>
+  <header>
     <h1>Discover Vizag</h1>
-    <p>Your ultimate guide to the beautiful city of Visakhapatnam - beaches, culture, food, and adventures await!</p>
-  </div>
-</header>
+    <p>Your ultimate travel guide to the beautiful city of Visakhapatnam</p>
+  </header>
 
-<main>
-  <section id="about" class="reveal">
-    <h2>About Vizag</h2>
-    <p>Visakhapatnam, popularly known as Vizag, is a port city and industrial center in the Indian state of Andhra Pradesh. Known for its beautiful beaches, scenic hills, and rich cultural heritage, Vizag is a perfect blend of nature and urban life.</p>
-  </section>
-
-  <section id="places" class="reveal">
-    <h2>Popular Places to Visit</h2>
-    <div class="places">
-      <div class="place-card" tabindex="0" data-img="C:\Users\yashu\OneDrive\desktop\rk.jpg" aria-label="Rama Krishna Beach">
-        <img src="C:\Users\yashu\OneDrive\desktop\rk.jpg" alt="Rama Krishna Beach" />
-        <div>
-          <h3>Rama Krishna Beach</h3>
-          <p>One of the most famous beaches in Vizag, ideal for sunrise views and evening walks.</p>
-        </div>
-      </div>
-      <div class="place-card" tabindex="0" data-img="C:\Users\yashu\OneDrive\desktop\kalilasagiri.jpg" aria-label="Kailasagiri Park">
-        <img src="C:\Users\yashu\OneDrive\desktop\kalilasagiri.jpg" alt="Kailasagiri Park" />
-        <div>
-          <h3>Kailasagiri Park</h3>
-          <p>A hilltop park offering panoramic views of the city and the coastline.</p>
-        </div>
-      </div>
-      <div class="place-card" tabindex="0" data-img="C:\Users\yashu\OneDrive\desktop\aruku.jpg" aria-label="Araku Valley">
-        <img src="C:\Users\yashu\OneDrive\desktop\aruku.jpg" alt="Araku Valley" />
-        <div>
-          <h3>Araku Valley</h3>
-          <p>A scenic hill station near Vizag famous for coffee plantations and waterfalls.</p>
-        </div>
-      </div>
+  <nav>
+    <div><a href="#">Home</a></div>
+    <div>
+      <a href="#about">About</a>
+      <a href="#blog">Blog</a>
+      <a href="#contact">Contact</a>
     </div>
-  </section>
+  </nav>
 
-  <section id="food" class="food-culture reveal">
-    <h2>Food & Culture</h2>
-    <p>Vizag offers a diverse culinary experience with coastal Andhra cuisine featuring fresh seafood and spicy curries. The city also celebrates vibrant festivals like Visakha Utsav, showcasing local art, dance, and music.</p>
-  </section>
+  <div class="container">
+    <section id="about">
+      <h2>About Discover Vizag</h2>
+      <p>Welcome to Discover Vizag Blog, your ultimate guide to exploring the wonders of Visakhapatnam. Our blog shares insights into the best spots—from serene beaches and hilltop views to lush valleys—giving you travel tips and inspiration for your next adventure.</p>
+    </section>
+  </div>
 
-  <section id="contact" class="reveal">
-    <h2>Contact Us</h2>
-    <form id="contactForm" aria-label="Contact form">
-      <label for="name">Name:</label>
-      <input type="text" id="name" placeholder="Your name" required aria-required="true" />
+  <div class="container">
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search blog posts...">
+    </div>
 
-      <label for="email">Email:</label>
-      <input type="email" id="email" placeholder="Your email" required aria-required="true" />
+    <section id="blog">
+      <div class="blog-post" data-tags="beach nature">
+        <h2>Exploring Rama Krishna Beach</h2>
+        <p class="date">Published on: June 10, 2025</p>
+        <img src="images/rk_beach.jpg" alt="Rama Krishna Beach">
+        <p>Experience the serene view of the Bay of Bengal and enjoy long walks along the coastline at Vizag’s iconic RK Beach.</p>
+        <div class="tags"><span class="tag">Beach</span> <span class="tag">Nature</span></div>
+        <div class="social-share">Share:
+          <a href="#">Facebook</a> <a href="#">Twitter</a> <a href="#">Instagram</a>
+        </div>
+        <div class="comments">
+          <h4>Leave a comment</h4>
+          <form class="comment-form">
+            <input type="text" placeholder="Your name" required>
+            <textarea placeholder="Your comment" rows="3" required></textarea>
+            <button type="submit">Post Comment</button>
+          </form>
+        </div>
+      </div>
 
-      <label for="message">Message:</label>
-      <textarea id="message" rows="4" placeholder="Your message" required aria-required="true"></textarea>
+      <div class="blog-post" data-tags="hill view">
+        <h2>Kailasagiri Hilltop Views</h2>
+        <p class="date">Published on: June 15, 2025</p>
+        <img src="images/kalilasagiri.jpg" alt="Kailasagiri">
+        <p>Overlooking the city, Kailasagiri provides a bird’s-eye view of the ocean and surrounding hills. Ideal for sightseeing and relaxation.</p>
+        <div class="tags"><span class="tag">Hill</span> <span class="tag">Viewpoint</span></div>
+        <div class="social-share">Share:
+          <a href="#">Facebook</a> <a href="#">Twitter</a> <a href="#">Instagram</a>
+        </div>
+        <div class="comments">
+          <h4>Leave a comment</h4>
+          <form class="comment-form">
+            <input type="text" placeholder="Your name" required>
+            <textarea placeholder="Your comment" rows="3" required></textarea>
+            <button type="submit">Post Comment</button>
+          </form>
+        </div>
+      </div>
 
-      <button type="submit">Send</button>
-    </form>
-  </section>
-</main>
+      <div class="blog-post" data-tags="nature valley">
+        <h2>Discover Araku Valley</h2>
+        <p class="date">Published on: June 20, 2025</p>
+        <img src="images/aruku.jpg" alt="Araku Valley">
+        <p>A scenic hill station near Vizag, Araku Valley is known for its coffee plantations, waterfalls, and lush green landscape.</p>
+        <div class="tags"><span class="tag">Valley</span> <span class="tag">Nature</span></div>
+        <div class="social-share">Share:
+          <a href="#">Facebook</a> <a href="#">Twitter</a> <a href="#">Instagram</a>
+        </div>
+        <div class="comments">
+          <h4>Leave a comment</h4>
+          <form class="comment-form">
+            <input type="text" placeholder="Your name" required>
+            <textarea placeholder="Your comment" rows="3" required></textarea>
+            <button type="submit">Post Comment</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
 
-<footer>
-  &copy; 2025 Discover Vizag. All rights reserved.
-</footer>
+  <div class="container">
+    <section id="contact">
+      <h2>Contact Us</h2>
+      <p>We’d love to hear from you! Fill out the form below to get in touch.</p>
+      <form id="contactForm">
+        <input type="text" id="contactName" placeholder="Your Name" required>
+        <input type="email" id="contactEmail" placeholder="Your Email" required>
+        <textarea id="contactMessage" rows="4" placeholder="Your Message" required></textarea>
+        <button type="submit">Send Message</button>
+      </form>
 
-<!-- Lightbox -->
-<div id="lightbox" role="dialog" aria-modal="true" aria-label="Image preview">
-  <img src="" alt="Expanded place image" />
-</div>
+      <!-- New Contact Information -->
+      <div class="contact-info">
+        <h3>Our Contact Information</h3>
+        <p><strong>Address:</strong> 123 Beachside Ave, Visakhapatnam, Andhra Pradesh, India</p>
+        <p><strong>Phone:</strong> +91 98765 43210</p>
+        <p><strong>Email:</strong> <a href="mailto:info@discovervizag.com">info@discovervizag.com</a></p>
+        <p><strong>Follow Us:</strong>
+          <a href="#" aria-label="Facebook">Facebook</a> |
+          <a href="#" aria-label="Twitter">Twitter</a> |
+          <a href="#" aria-label="Instagram">Instagram</a>
+        </p>
+      </div>
+    </section>
+  </div>
 
-<!-- Scroll to top -->
-<button id="scrollTopBtn" aria-label="Scroll to top">&#8679;</button>
+  <footer>
+    &copy; 2025 Discover Vizag Blog | Created as part of Unified Mentor Project
+  </footer>
 
-<script>
-  // Sticky header background toggle
-  window.addEventListener('scroll', () => {
-    const header = document.querySelector('header');
-    if (window.scrollY > 50) {
-      header.classList.add('sticky');
-    } else {
-      header.classList.remove('sticky');
-    }
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const searchInput = document.getElementById('searchInput');
+      const blogPosts = document.querySelectorAll('.blog-post');
 
-    // Show scroll to top button
-    const scrollBtn = document.getElementById('scrollTopBtn');
-    if (window.scrollY > 300) {
-      scrollBtn.style.display = 'block';
-    } else {
-      scrollBtn.style.display = 'none';
-    }
-  });
+      searchInput.addEventListener('input', () => {
+        const query = searchInput.value.toLowerCase();
+        blogPosts.forEach(post => {
+          const title = post.querySelector('h2').textContent.toLowerCase();
+          const content = post.querySelector('p:not(.date)').textContent.toLowerCase();
+          const tags = post.getAttribute('data-tags').toLowerCase();
+          post.style.display = (title.includes(query) || content.includes(query) || tags.includes(query)) ? '' : 'none';
+        });
+      });
 
-  // Smooth reveal on scroll
-  function revealSections() {
-    const reveals = document.querySelectorAll('.reveal');
-    for (const section of reveals) {
-      const windowHeight = window.innerHeight;
-      const elementTop = section.getBoundingClientRect().top;
-      const revealPoint = 150;
-      if (elementTop < windowHeight - revealPoint) {
-        section.classList.add('visible');
-      }
-    }
-  }
-  window.addEventListener('scroll', revealSections);
-  window.addEventListener('load', revealSections);
+      const commentForms = document.querySelectorAll('.comment-form');
+      commentForms.forEach(form => {
+        form.addEventListener('submit', e => {
+          e.preventDefault();
+          const nameInput = form.querySelector('input[type="text"]');
+          const commentInput = form.querySelector('textarea');
+          const name = nameInput.value.trim();
+          const comment = commentInput.value.trim();
+          if (!name || !comment) return alert('Please fill in both name and comment.');
+          const commentDisplay = document.createElement('div');
+          commentDisplay.className = 'posted-comment';
+          commentDisplay.style = 'margin-top:10px;padding:8px;border:1px solid #ddd;border-radius:6px;background:#f0f8ff;';
+          commentDisplay.innerHTML = `<strong>${name}:</strong> <span>${comment}</span>`;
+          form.parentElement.appendChild(commentDisplay);
+          nameInput.value = '';
+          commentInput.value = '';
+        });
+      });
 
-  // Mobile menu toggle
-  const menuToggle = document.getElementById('menuToggle');
-  const navLinks = document.getElementById('navLinks');
-
-  menuToggle.addEventListener('click', () => {
-    navLinks.classList.toggle('active');
-    menuToggle.classList.toggle('active');
-  });
-
-  // Close mobile menu on link click
-  navLinks.querySelectorAll('a').forEach(link =>
-    link.addEventListener('click', () => {
-      navLinks.classList.remove('active');
-      menuToggle.classList.remove('active');
-    })
-  );
-
-  // Place cards lightbox
-  const placeCards = document.querySelectorAll('.place-card');
-  const lightbox = document.getElementById('lightbox');
-  const lightboxImg = lightbox.querySelector('img');
-
-  placeCards.forEach(card => {
-    card.addEventListener('click', () => {
-      const imgSrc = card.getAttribute('data-img');
-      lightboxImg.src = imgSrc;
-      lightbox.style.display = 'flex';
-      document.body.style.overflow = 'hidden'; // Prevent background scroll
-    });
-    // Allow keyboard focus and activation
-    card.addEventListener('keydown', e => {
-      if (e.key === 'Enter' || e.key === ' ') {
+      const contactForm = document.getElementById('contactForm');
+      contactForm.addEventListener('submit', function (e) {
         e.preventDefault();
-        card.click();
-      }
+        const name = document.getElementById('contactName').value.trim();
+        const email = document.getElementById('contactEmail').value.trim();
+        const message = document.getElementById('contactMessage').value.trim();
+        if (!name || !email || !message) return alert('Please fill in all fields.');
+        alert('Thank you, ' + name + '! Your message has been sent.');
+        contactForm.reset();
+      });
     });
-  });
-
-  lightbox.addEventListener('click', () => {
-    lightbox.style.display = 'none';
-    lightboxImg.src = '';
-    document.body.style.overflow = 'auto';
-  });
-
-  // Scroll to top button
-  const scrollTopBtn = document.getElementById('scrollTopBtn');
-  scrollTopBtn.addEventListener('click', () => {
-    window.scrollTo({top: 0, behavior: 'smooth'});
-  });
-
-  // Contact form submit
-  document.getElementById('contactForm').addEventListener('submit', function(e){
-    e.preventDefault();
-    alert('Thank you for reaching out! We will get back to you soon.');
-    this.reset();
-  });
-</script>
+  </script>
 
 </body>
 </html>
